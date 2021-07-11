@@ -6,7 +6,7 @@ class PrefixTreeNode {
   }
 }
 
-class PrefixTree extends PrefixTreeNode {
+export default class PrefixTree extends PrefixTreeNode {
   constructor() {
     super(null);
   }
@@ -64,24 +64,5 @@ class PrefixTree extends PrefixTreeNode {
     console.log(this.predictWord('h'));
   }
 }
-var x = new PrefixTree()
-x.addWord("he");
-x.addWord("hers");
-x.addWord("helll");
-x.addWord("her");
-x.logAllWords();
-x.addWord("afds");
 
 
- // Input keys (use only 'a' through 'z' and lower case)
-let keys = ["the", "a", "there", "answer", "any",
-                    "by", "bye", "their","abc"];   
-let t = new Trie();
-console.log("Keys to insert: ");
-console.log(keys);
-  //Construct Trie
-for (let i=0; i<keys.length; i++){
-t.insert(keys[i]);
-
-}
-console.log(t.search("the"))
