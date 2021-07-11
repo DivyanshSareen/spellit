@@ -1,68 +1,109 @@
-class PrefixTreeNode {
-  constructor(value) {
-    this.children = {};
-    this.endWord = null;
-    this.value = value;
-  }
-}
+// we start with the TrieNode
+const TrieNode = function (key) {
+  // the "key" value will be the character in sequence
+  this.key = key;
+  
+  // we keep a reference to parent
+  this.parent = null;
+  
+  // we have hash of children
+  this.children = {};
+  
+  // check to see if the node is at the end
+  this.end = false;
+  
+  this.getWord = function() {
+    let output = [];
+    let node = this;
 
-export default class PrefixTree extends PrefixTreeNode {
-  constructor() {
-    super(null);
-  }
-
-  addWord(string) {
-    const addWordHelper = (node, str) => {
-      if (!node.children[str[0]]) {
-        node.children[str[0]] = new PrefixTreeNode(str[0]);
-        if (str.length === 1) {
-
-          node.children[str[0]].endWord = 1;
-        }
-      } else {
-
-      }
-      if (str.length > 1) {
-        addWordHelper(node.children[str[0]], str.slice(1));
-      }
-    };
-    addWordHelper(this, string);
-  }
-  predictWord(string) {
-    var getRemainingTree = function(string, tree) {
-      var node = tree;
-      while (string) {
-        node = node.children[string[0]];
-        string = string.substr(1);
-      }
-      return node;
-    };
-
-    var allWords = [];
-    
-    var allWordsHelper = function(stringSoFar, tree) {
-      for (let k in tree.children) {
-        const child = tree.children[k]
-        var newString = stringSoFar + child.value;
-        if (child.endWord) {
-          allWords.push(newString);
-        }
-        allWordsHelper(newString, child);
-      }
-    };
-
-    var remainingTree = getRemainingTree(string, this);
-    if (remainingTree) {
-      allWordsHelper(string, remainingTree);
+    while (node !== null) {
+      output.unshift(node.key);
+      node = node.parent;
     }
 
-    return allWords;
-  }
+    return output.join('');
+  };
+}
+export const Trie = function() {
+  this.root = new TrieNode(null);
+ 
+    // inserts a word into the trie.
+  this.insert = function(word) {
+    let node = this.root; // we start at the root
 
-  logAllWords() {
-    console.log('------ ALL WORDS IN PREFIX TREE -----------')
-    console.log(this.predictWord('h'));
+    // for every character in the word
+    for(let i = 0; i < word.length; i++) {
+      // check to see if character node exists in children.
+      if (!node.children[word[i]]) {
+        // if it doesn't exist, we then create it.
+        node.children[word[i]] = new TrieNode(word[i]);
+
+        // we also assign the parent to the child node.
+        node.children[word[i]].parent = node;
+      }
+
+      // proceed to the next depth in the trie.
+      node = node.children[word[i]];
+
+      // finally, we check to see if it's the last word.
+      if (i == word.length-1) {
+        // if it is, we set the end flag to true.
+        node.end = true;
+      }
+    }
+  };
+    this.contains = function(word) {
+    let node = this.root;
+
+    // for every character in the word
+    for(let i = 0; i < word.length; i++) {
+      // check to see if character node exists in children.
+      if (node.children[word[i]]) {
+        // if it exists, proceed to the next depth of the trie.
+        node = node.children[word[i]];
+      } else {
+        // doesn't exist, return false since it's not a valid word.
+        return false;
+      }
+    }
+
+    // we finished going through all the words, but is it a whole word?
+    return node.end;
+  };
+  this.find = function(prefix) {
+    let node = this.root;
+    let output = [];
+
+    // for every character in the prefix
+    for(let i = 0; i < prefix.length; i++) {
+      // make sure prefix actually has words
+      if (node.children[prefix[i]]) {
+        node = node.children[prefix[i]];
+      } else {
+        // there's none. just return it.
+        return output;
+      }
+    }
+
+    // recursively find all words in the node
+    findAllWords(node, output);
+
+    return output;
+  };
+  
+  // recursive function to find all words in the given node.
+  const findAllWords = (node, arr) => {
+    // base case, if node is at a word, push to output
+    if (node.end) {
+      arr.unshift(node.getWord());
+    }
+
+    // iterate through each children, call recursive findAllWords
+    for (let child in node.children) {
+      findAllWords(node.children[child], arr);
+    }
   }
 }
+
 
 
