@@ -4,7 +4,6 @@ import requests
 import sys
 sys.path.append(r"d:\git\spellit\data_scrape\lib\site-packages")
 
-
 URL = "https://www.ef.com/wwen/english-resources/english-vocabulary/top-3000-words/"
 
 page = requests.get(URL)
