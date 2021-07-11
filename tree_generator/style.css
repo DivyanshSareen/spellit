@@ -1,0 +1,18 @@
+body {
+  text-align: center;
+  background-color: #2c2e43;
+}
+h1 {
+  color: #ffd523;
+}
+p {
+  color: #b2b1b9;
+}
+#inp {
+  width: 500px;
+  background-color: #595260;
+  color: #b2b1b9;
+}
+#result {
+  color: #ffd523;
+}

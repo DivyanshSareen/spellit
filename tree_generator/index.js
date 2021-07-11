@@ -32,9 +32,11 @@ function spell(e){
     var res = x.find(e);
     var r = document.getElementById("result");
     var html = "";
-    for(var i = 0; i < 5; i ++)
+    var i = 0;
+    while(i < 5 && i < res.length)
     {
         html = html + res[i] + " ";
+        i++;
     }
     r.innerHTML = html;
 }
